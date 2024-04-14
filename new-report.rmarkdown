@@ -1,0 +1,58 @@
+---
+title: "Proportion of schools with no sanitation service"
+subtitle: "Exploring the data from Unicef through Total Obervation value since 2000"
+author: "Edward Arby"
+date: 14/04/2024
+format: html
+theme: sandstone
+backgroundcolor: lightgreen
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# libraries
+library(tidyverse)
+library(plotly)
+
+#data
+unicef_indicator_1 <- read_csv("unicef_indicator_1.csv") 
+```
+
+```{r}
+scatter_plot_1 <- unicef_indicator_1 %>%
+ggplot() +
+  aes(obs_value, time_period, color = country) +
+  geom_point()
+ggplotly(scatter_plot_1)
+```
+
+```{r}
+bar_chart_1 <- unicef_indicator_1 %>%
+  ggplot() +
+  aes(alpha_3_code, obs_value, fill = country) +
+  geom_col()
+
+ggplotly(bar_chart_1)
+```
+
+```{r}
+timeseries_plot_1 <-unicef_indicator_1 %>%
+   
+  ggplot() +
+  aes (obs_value,time_period, color = country) +
+  geom_line()
+
+ggplotly(timeseries_plot_1)
+```
+
+```{r}
+map_world <- map_data("world")
+
+map_data_join <-full_join(unicef_indicator_1,map_world, by = c("country" = "region"))
+
+ggplot(map_data_join) +
+  aes(x = long, y = lat, group = group, fill = obs_value) +  
+  geom_polygon()
+```

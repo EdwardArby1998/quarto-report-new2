@@ -1,0 +1,31 @@
+---
+title: "Proportion of schools with no sanitation service"
+subtitle: "Exploring the data from Unicef through Total Obervation value since 2000"
+author: "Edward Arby"
+date: 14/04/2024
+format: html
+theme: sandstone
+backgroundcolor: lightgreen
+---
+
+```{r}
+#1 label: setup
+#1 include: false
+
+# libraries
+library(tidyverse)
+library(plotly)
+
+#data
+unicef_indicator_1 <- read_csv("unicef_indicator_1.csv") 
+
+
+```{r}
+scatter_plot_1 <- unicef_indicator_1 %>%
+ggplot() +
+  aes(obs_value, time_period, color = country) +
+  geom_point()
+ggplotly(scatter_plot_1)
+
+
+

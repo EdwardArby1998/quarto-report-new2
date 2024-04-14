@@ -1,0 +1,77 @@
+---
+title: "Proportion of schools with no sanitation service"
+subtitle: "Exploring the data from Unicef through Total Obervation value since 2000"
+author: "Edward Arby"
+date: 2024/04/14
+format: html
+theme: quartz
+backgroundcolor: lightgreen
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+
+
+```{r}
+#| label: setup
+#| include: false
+
+# libraries
+library(tidyverse)
+library(plotly)
+
+#data
+unicef_indicator_1 <- read_csv("unicef_indicator_1.csv") 
+```
+
+The data on the proportion of schools with no sanitation service in various countries. One story that stands out is the situation in Mali, where 19.1% of schools have no sanitation service. This is a significant issue as access to proper *sanitation facilities* is crucial for maintaining hygiene and health, especially in schools where children are more susceptible to diseases.
+
+```{r}
+#| fig-cap: "World map showing the propotion of schools with no sanitation services"
+map_world <- map_data("world")
+map_data_join <-full_join(unicef_indicator_1,map_world, by = c("country" = "region"))
+
+ggplot(map_data_join) +
+  aes(x = long, y = lat, group = group, fill = obs_value) +  
+  geom_polygon()
+```
+
+*Mali* has the highest proportion of schools with no sanitation service among the countries listed in the spreadsheet.This is in contrast to countries like *Malaysia, Mauritius, and Monaco*, where there are no schools without sanitation services.
+
+```{r}
+#| fig-cap: "Time-series sheet showing the propotion of schools with no sanitation services since 2000"
+timeseries_plot_1 <-unicef_indicator_1 %>%
+   
+  ggplot() +
+  aes (obs_value,time_period, color = country) +
+  geom_line()
+
+ggplotly(timeseries_plot_1)
+```
+
+Other countries with high proportions of schools with no sanitation service include *Madagascar (28.01%), Mauritania (60.43%), and Niger (64.39%)*.
+
+```{r}
+#| fig-cap: "Scatter plot sheet showing the propotion of schools with no sanitation services since 2000"
+scatter_plot_1 <- unicef_indicator_1 %>%
+ggplot() +
+  aes(obs_value, time_period, color = country) +
+  geom_point()
+
+ggplotly(scatter_plot_1)
+```
+
+
+```{r}
+#| fig-cap: "Bar chart representing the propotion of schools with no sanitation services since 2000"
+bar_chart_1 <- unicef_indicator_1 %>%
+  ggplot() +
+  aes(alpha_3_code, obs_value, fill = country) +
+  geom_col()
+
+ggplotly(bar_chart_1)  
+```
+
+The situation in Mali and other countries with high proportions of schools without sanitation services underscores the need for urgent action to address this issue. Providing access to *proper sanitation facilities* in schools can help *prevent the spread of diseases* and *promote better health outcomes for children*.
